@@ -7,61 +7,6 @@ require 'net/imap'
 require 'gmail'
 require "rubygems"
 
-
-def self.gmaillogin(username, password)
-
-  if !username.nil? && !password.nil?
-
-      @gusername = username
-      @gpassword = password
-      
-      # session[:gmail_us] = @gusername
-      # session[:gmail_pa] = @gpassword
-
-      @gmail = Gmail.new(@gusername,@gpassword)
-      
-
-      render "display", :layout=>false
-      @gmail.logout
-    
-  else
-      render "display", :layout=>false
-  end
-  
-end
-
-def self.googledrivelogin(username, password, spreadsheetid, text)
-
-  if !username.nil? && !password.nil?
-
-      @gusername = username
-      @gpassword = password
-      
-      # session[:gdrive_us] = @gusername
-      # session[:gdrive_pa] = @gpassword
-
-      @session = GoogleDrive.login(@gusername, @gpassword)
-      @ws = @session.spreadsheet_by_key(spreadsheetid).worksheets[0]
-
-      @textrow = text.length
-      @wsrow = @ws.num_rows+1
-
-     i=0
-     j=1
-      @textrow.times do
-        @textcol = text[i].length
-        @textcol.times do
-          @ws[@wsrow + i , j] = text[i][j-1]
-          j+=1
-        end
-        i+=1
-        j=1
-      end
-      @ws.save()
-end
-
-end
-
 def self.googledriveappend(username, password, spreadsheetid, text, after_row)
 
   if !username.nil? && !password.nil? && text.length >0
